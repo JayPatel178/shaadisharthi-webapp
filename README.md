@@ -1,163 +1,311 @@
-# ShaadiSharthi – Service Provider Portal
+# 💍 ShaadiSharthi
 
-This repository contains the **Service Provider Frontend** of the **ShaadiSharthi** wedding services platform, built with Angular and Bootstrap.
-It allows service providers (e.g., photographers, caterers, decorators) to register, manage their business, upload services with media, and handle bookings—all connected to a Java Servlet backend.
+**ShaadiSharthi** is a full-stack wedding services platform that connects **Customers, Service Providers, and Admins**. Customers can discover and book wedding services, providers can manage their services and bookings, and admins can manage users, providers, queries, and analytics.
 
-> ⚠️ Note: This repo only contains the **Service Provider Frontend** (Angular + Bootstrap).  
-> The platform also has:  
-> - **Admin frontend** (github.com/JayPatel178/shaadisharthi-admin)  
-> - **Customer frontend** (github.com/JayPatel178/shaadisharthi-customer)  
-> - **Java Backend** (github.com/JayPatel178/shaadisharthi-backend, built with Servlets)  
-
+The complete application is containerized using **Docker & Docker Compose** and uses **Nginx** as a reverse proxy.
 
 ---
 
-## Live demo & repos
-- **Live Demo URL**: `https://shaadisharthi.theworkpc.com/provider`
+## 🚀 Features
+
+### Customer
+
+* Register/Login
+* Search and filter wedding services
+* View service details
+* Book and manage services
+* Reviews and notifications
+* Real-time booking notifications
+
+### Service Provider
+
+* Provider registration and authentication
+* Manage services (CRUD)
+* Upload service media using Cloudinary
+* Manage booking requests
+* Provider dashboard and statistics
+
+### Admin
+
+* Secure admin authentication
+* Role-based access control
+* Manage customers and providers
+* Approve service providers
+* Manage support queries
+* Dashboard analytics
+* TOTP-based 2FA
 
 ---
 
-## 🚀 Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend Framework**: [Angular](https://angular.io/)
-- **Styling**: [Bootstrap](https://getbootstrap.com/)
-- **Backend**: Java (Servlets, REST APIs)
-- **Database**: MySQL
-- **Authentication**: JWT (stored in Local Storage)
-- **Media Storage**: [Cloudinary](https://cloudinary.com/) (via signed uploads)
-- **Charts**: Angular chart libraries
+### Frontend
 
----
+* **Customer:** Next.js, TypeScript, Tailwind CSS
+* **Provider:** Angular, TypeScript, Bootstrap
+* **Admin:** React, JavaScript, Bootstrap
 
-## 🎯 Features
+### Backend
 
-### 🔐 Authentication & Onboarding
-- **Login/Signup** flow with JWT-based authentication.
-- **Forgot Password** → Email-based reset link with a one-time JWT.
-- **Create Account** → Email-based flow to set password, name, and email.
-- **Role-based Redirection**:
-  - `Basic Registered` → Redirected to Business Details form.
-  - `Pending Approval` → Redirected to a waiting page.
-  - `Approved` → Full access to the dashboard.
+* **Java Servlets & JSP**
+* **Apache Tomcat**
+* **JDBC**
+* **MySQL**
+* **HikariCP**
+* **JWT Authentication**
+* **WebSockets**
+* **JavaMail**
+* **SLF4J + Logback**
 
-### 📝 Business Registration & Approval
-- **Business Details Form** where providers submit:
-  - Business name, GST, Aadhaar, PAN, location, and phone numbers.
-- **Admin Approval System**:
-  - Admin reviews submitted details.
-  - Provider receives an email notification on approval or rejection (with reason).
+### DevOps & Services
 
-### 📊 Dashboard
-- **Personalized Dashboard** with widgets for:
-  - Upcoming orders, total bookings, and customer stats.
-- **Graphs & Charts** for booking analysis:
-  - Status breakdown (Pending / Accepted / Rejected / Completed).
-  - Service performance and ratings.
-  - Financial overview.
-- **Sidebar Navigation** for easy access to all features.
-
-### 🛠️ Service Management
-- **CRUD Operations** for services (Add/Edit/Delete).
-  - Define service name, category, description, and price.
-- **Media Uploads** for images and videos.
-- **Cloudinary Integration**:
-  - Backend generates a signature for direct, secure uploads from the client.
-  - Media metadata is stored in the backend database.
-- **Caching**: Service data is cached on the client to reduce backend calls.
-
-### 📅 Booking Management
-- **Pending Bookings**:
-  - View a list of new customer bookings.
-  - `Accept` or `Reject` bookings (with an optional reason for rejection).
-- **Confirmed Bookings**:
-  - View all accepted bookings with customer and service details.
-  - `Mark as Complete` (only after the event date).
-  - `Cancel` a confirmed booking.
-- **Performance Scaling** for large lists:
-  - **Virtual Scrolling (Angular CDK)** renders only visible items in the DOM, ensuring smooth performance even with hundreds of bookings.
-  - **Hybrid Infinite Scroll + Pagination** fetches bookings in chunks (20 at a time) as the user scrolls.
-
-### 👤 Account & Support
-- **Profile Management**:
-  - View and edit personal and business details (name, address, contact info).
-- **Document Management**:
-  - Upload and view legal documents (GST, Aadhaar, PAN).
-- **Change Password** with current and new password validation.
-- **FAQs Page** with an expandable Q&A list managed by the admin.
-- **Contact Support** form to submit queries directly to the admin.
-
-### 🛡️ Security
-- **Current State**:
-  - JWT stored in `localStorage` (vulnerable to XSS).
-  - Role-based route guards for different provider statuses.
-- **Planned Improvements**:
-  - Migrate JWT to HttpOnly cookies for enhanced security.
-  - Implement stricter token expiry and refresh logic.
-
-### ⚡ Performance Optimizations
-- **Client-Side Caching** of service data.
-- **Lazy Loading** for the services module.
-- **Virtual Scrolling** and **Infinite Scroll** for booking lists.
+* Docker & Docker Compose
+* Nginx
+* Cloudinary
+* AWS EC2
+* Let's Encrypt / Certbot
 
 ---
 
-## ⚙️ Getting Started
+## 🏗️ Architecture
 
-### 1. Clone the repo
-```bash
-git clone https://github.com/your-username/shaadisharthi-provider.git
-cd shaadisharthi-provider
+```text
+Customer (Next.js) ─┐
+Provider (Angular) ─┼──> Nginx ──> Java Servlets ──> MySQL
+Admin (React) ──────┘              │
+                                   ├── Cloudinary
+                                   ├── Email
+                                   └── WebSocket
 ```
 
-### 2. Install dependencies
+---
+
+# ⚙️ Local Setup
+
+## 1. Prerequisites
+
+Install:
+
+* Git
+* Docker Desktop
+* Node.js & npm
+* Angular CLI
+
 ```bash
-npm install
+npm install -g @angular/cli
 ```
 
-### 3. Set up environment variables
-Create a file `src/environments/environment.ts` with the following content:
+---
+
+## 2. Clone Repository
+
+```bash
+git clone https://github.com/JayPatel1178/shaadisharthi-webapp.git
+
+cd shaadisharthi-webapp
+```
+
+---
+
+## 3. Configure Environment Variables
+
+Create `.env` in the **project root**:
+
+```env
+# MySQL
+MYSQL_ROOT_PASSWORD=your_root_password
+MYSQL_DATABASE=shaadisharthi
+MYSQL_USER=appuser
+MYSQL_PASSWORD=apppass
+
+# Database
+DB_URL=jdbc:mysql://shaadi_mysql:3306/shaadisharthi
+DB_USERNAME=appuser
+DB_PASSWORD=apppass
+DB_NAME=shaadisharthi
+DB_DRIVER=com.mysql.cj.jdbc.Driver
+
+# JWT
+JWT_SECRET_KEY=your_long_secret_key
+JWT_RESET_SECRET_KEY=your_reset_secret_key
+
+# Email
+EMAIL_FROM=your_email
+EMAIL_PASSWORD=your_email_app_password
+
+# Application
+APP_BASE_URL=http://localhost
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# CORS
+ADMIN_ALLOWED_ORIGINS=http://localhost
+SERVICEPROVIDER_ALLOWED_ORIGINS=http://localhost
+CUSTOMER_ALLOWED_ORIGINS=http://localhost
+```
+
+Add the required **role-mapping variables** used by the backend to the same `.env` file.
+
+> ⚠️ Never commit real passwords, JWT secrets, email passwords, or Cloudinary secrets to Git.
+
+---
+
+## 4. Customer Environment
+
+Create:
+
+`shaadisharthi-next/.env`
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_INTERNAL_API_URL=http://shaadisharthi-backend:8080
+NEXT_PUBLIC_WEBSOCKET_API_URL=ws://localhost:8080/CustomerSocket
+NODE_ENV=development
+```
+
+---
+
+## 5. Admin Environment
+
+Create:
+
+`shaadisharthi-react/.env`
+
+```env
+REACT_APP_API_URL=http://localhost:8080
+```
+
+---
+
+## 6. Provider Environment
+
+Create:
+
+`shaadisharthi-angular/src/environments/environment.ts`
+
 ```typescript
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/ShaadiSharthi',
+  apiUrl: "http://localhost:8080",
+
   cloudinary: {
-    cloudName: 'YOUR_CLOUD_NAME',
+    cloudName: "your_cloudinary_cloud_name"
   },
-  supportEmail: 'support@shaadisharthi.com'
+
+  supportEmail: "support@shaadisharthi.com"
 };
 ```
 
-### 4. Run development server
+---
+
+## 7. Start Application
+
+Run from the project root:
+
 ```bash
-ng serve
+docker compose up -d --build
 ```
-Navigate to `http://localhost:4200/provider`. The app will automatically reload if you change any of the source files.
+
+Check containers:
+
+```bash
+docker compose ps
+```
+
+The backend may take some time to initialize on the first startup.
 
 ---
 
-## 📈 Future Roadmap
+## 🌐 Local URLs
 
-- **Security Hardening**: Migrate from `localStorage` to HttpOnly cookies and implement a stricter token refresh flow.
-- **Cloudinary Cleanup**: Automate the removal of unused media from Cloudinary via a scheduled service.
-- **Multi-language Support**: Expand the UI to support multiple languages.
-- **Robust Media Uploading**: Add file size limits, better error handling, and MIME type validation.
-- **Real-time Notifications**: Use WebSockets for instant booking updates.
-- **Advanced Analytics**: Introduce trends, financial forecasting, and customer retention insights.
-
----
-
-## 👨‍💻 Contact
-
--   **Author**: JAY PATEL — Full Stack Developer (Java + Modern JS Frameworks)
--   **Email**: jayptl565188@example.com
--   **GitHub**: github.com/JayPatel178
+| Application | URL                       |
+| ----------- | ------------------------- |
+| Customer    | http://localhost/customer |
+| Provider    | http://localhost/provider |
+| Admin       | http://localhost/admin    |
 
 ---
 
-## 📜 License
+## 🗄️ Database
 
--   This repository is provided for portfolio and educational purposes.
+MySQL runs automatically inside Docker.
+
+Access MySQL:
+
+```bash
+docker compose exec mysql mysql -u appuser -p
+```
+
+Then:
+
+```sql
+USE shaadisharthi;
+SHOW TABLES;
+```
 
 ---
-Built with ❤️ for the wedding industry
 
+## 📋 Useful Commands
+
+### View backend logs
+
+```bash
+docker compose logs -f shaadisharthi-backend
+```
+
+### Restart application
+
+```bash
+docker compose restart
+```
+
+### Stop application
+
+```bash
+docker compose down
+```
+
+### Rebuild
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+## 📁 Project Structure
+
+```text
+shaadisharthi-webapp/
+│
+├── shaadisharthi-next/       # Customer - Next.js
+├── shaadisharthi-angular/   # Provider - Angular
+├── shaadisharthi-react/     # Admin - React
+├── shaadisharthi-backend/   # Backend - Java Servlets
+├── nginx/                   # Nginx configuration
+├── docker-compose.yml
+├── deploy.sh
+└── .env
+```
+---
+
+## 📦 Individual Repositories
+
+* **Customer:** https://github.com/JayPatel178/shaadisharthi-customer
+* **Provider:** https://github.com/JayPatel178/shaadisharthi-provider
+* **Admin:** https://github.com/JayPatel178/shaadisharthi-admin
+* **Backend:** https://github.com/JayPatel178/shaadisharthi-backend
+
+---
+
+## 👨‍💻 Author
+
+**Jay Patel** — Full-Stack Developer
+Java • React • Angular • Next.js • MySQL • Docker
+
+---
+
+> Built for portfolio and educational purposes.
